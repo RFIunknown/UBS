@@ -1,0 +1,8 @@
+node_modules
+dist
+*lock.json
+*.lock
+*.log
+
+# waiting
+_README.md
