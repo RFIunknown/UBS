@@ -1,5 +1,5 @@
 import got from 'got'
-import { Family100, Family100Schema } from '../types/index.js'
+import { Family100, Family100Schema } from '../Types'
 
 export let family100json: Family100[]
 export default async function family100 (): Promise<Family100> {
