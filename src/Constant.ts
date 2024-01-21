@@ -1,33 +1,21 @@
-export const DoujindesuBaseUrl = "https://doujindesu.tv"
-export const OtakudesuBaseUrl = "https://otakudesu.lol"
-export const YoutubeSearchBaseUrl = "https://youtube.com"
+export const DEFAULT_HEADERS = {
+    'accept': '*/*',
+    'accept-encoding': 'gzip, deflate, br',
+    'accept-language': 'en-US,en;q=0.9',
+    'sec-ch-ua': '"Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
+}
+
 export const YoutubeDownloadBaseUrl =
 	"https://backendpro.myconverters.com"
-export const KomikuIdBaseUrl = "https://komiku.id"
-export const AnoboyBaseUrl = "https://anoboy.ink"
-export const StatusWaIndonesiaBaseUrl =
-	"https://www.videostatusmarket.com"
-export const UnsplashBaseUrl = "https://api.unsplash.com"
 export const InstagramDownloadBaseUrl: {
 	v1: string;
 	v2: string;
 } = { v1: "https://downloadgram.org", v2: "https://indown.io" }
-export const TiktokDownloadRapidApiServer =
-	"https://tiktok-video-no-watermark2.p.rapidapi.com"
-export const DanbooruBaseUrl = "https://danbooru.donmai.us"
 export const FacebookDownloadBaseUrls: { v1: string } = {
 	v1: "https://getmyfb.com"
 }
-export const MusicApiJamendoBaseUrl = "https://api.jamendo.com"
-export const ApkmodyIoBaseUrl = "https://apkmody.io"
-export const PinterestDownloadBaseUrls: { v1: string } = {
-	v1: "https://pinterestvideo.com"
-}
-export const PrivateApiPhotoFunia = "https://photofunia.itsrose.site"
-export const PrivateWorkerApiItsrose = "https://worker.itsrose.site"
-export const BokepSinBaseUrl = "https://bokepsin.guru"
-export const APIsItsRose = "https://api.itsrose.site"
-export const nhentaiBaseUrl = "https://nhentai.to"
-export const XvideosBaseUrl = "https://xvideos.com"
-export const nineAppsBaseUrl = "https://9apps.com"
-export const hentaiHavenBaseUrl = "https://hentaihaven.xxx"
