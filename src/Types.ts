@@ -13,21 +13,33 @@ export const Family100Schema = z.object({
 })
 export type Family100 = z.infer<typeof Family100Schema>
 
-export type YoutubeSearchResult = {
-	title: string;
-	thumbnail: string;
-	duration: string;
-	uploaded: string;
-	views: string;
-	url: string;
-}[];
-export type YoutubeDownloadResult = {
-	title: string;
-	duration: string;
-	thumbnail: string;
-	urls: { url: string; quality: string; ext: string }[];
-	mp3: string;
-};
+export const YoutubeDownloaderArgsSchema = z.object({
+    0: z.string().url(),
+    1: z.literal('id')
+        .or(z.literal('en'))
+        .or(z.literal('es'))
+        .optional()
+})
+export type YoutubeDownloaderArgs = z.infer<typeof YoutubeDownloaderArgsSchema>
+const YoutubedlDataSchema = z.object({
+    quality: z.string(),
+    type: z.string(),
+    fileSizeH: z.string(),
+    fileSize: z.number(),
+    download: z.function(z.tuple([]), z.promise(z.string().url()))
+})
+
+export const YoutubedlSchema = z.object({
+    id: z.string(),
+    thumbnail: z.string(),
+    title: z.string(),
+    duration: z.number(),
+    video: z.record(z.string(), YoutubedlDataSchema),
+    audio: z.record(z.string(), YoutubedlDataSchema),
+    other: z.record(z.string(), YoutubedlDataSchema)
+})
+export type Youtubedl = z.infer<typeof YoutubedlSchema>
+
 export type InstagramDownloadResults = {
 	url: string;
 }[];
