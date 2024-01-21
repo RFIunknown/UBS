@@ -1,3 +1,10 @@
+import { z } from 'zod'
+
+export const Family100Schema = z.object({
+    soal: z.string(),
+    jawaban: z.array(z.string())
+})
+export type Family100 = z.infer<typeof Family100Schema>
 
 export type YoutubeSearchResult = {
 	title: string;
