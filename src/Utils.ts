@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios"
 import cheerio from "cheerio"
+import crypto from 'crypto'
 
 function CreateInstance (
 	headers?: { [key: string]: any },
