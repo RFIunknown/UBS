@@ -1,120 +1,85 @@
-import { Axios, Cheerio } from "../Utils"
-import { YoutubeSearchBaseUrl, YoutubeDownloadBaseUrl } from "../Constant"
+import got from 'got'
+import { Axios, Cheerio, parseFileSize } from "../Utils"
+import { DEFAULT_HEADERS } from "../Constant"
 import { errorHandling } from "../Interface"
-import { YoutubeSearchResult, YoutubeDownloadResult } from "../Types"
+import {
+    YoutubeDownloaderArgsSchema,
+    YoutubeDownloaderArgs,
+    YoutubedlSchema,
+    Youtubedl,
+    ConvertResponseSchema,
+    LinkItem,
+    YoutubedlResponseSchema
+} from "../Types"
 
-async function search (
-	query: string
-): Promise<YoutubeSearchResult[] | errorHandling> {
-	try {
-		const { data } = await Axios.request({
-			baseURL: YoutubeSearchBaseUrl,
-			url: "/results",
-			params: {
-				search_query: query
-			}
-		}).catch((e: any) => e?.response)
-		const $ = Cheerio(data)
-		let _string = ""
-		$("script").each((i: number, e: any) => {
-			if (/var ytInitialData = /gi.exec($(e).html())) {
-				_string += $(e)
-					.html()
-					.replace(/var ytInitialData = /i, "")
-					.replace(/;$/, "")
-			}
-		})
-		const _initData =
-			JSON.parse(_string).contents.twoColumnSearchResultsRenderer
-				.primaryContents
+export default async function youtubedl (
+    url: string,
+    server?: YoutubeDownloaderArgs['1']
+) {
+    YoutubeDownloaderArgsSchema.parse(arguments)
 
-		const Results: any[] = []
-		let _render = null
-		if (_initData.sectionListRenderer) {
-			_render = _initData.sectionListRenderer.contents
-				.filter((item: any) =>
-					item?.itemSectionRenderer?.contents.filter(
-						(v: any) =>
-							v.videoRenderer || v.playlistRenderer || v.channelRenderer
-					)
-				)
-				.shift().itemSectionRenderer.contents
-		}
-		if (_initData.richGridRenderer) {
-			_render = _initData.richGridRenderer.contents
-				.filter(
-					(item: any) => item.richGridRenderer && item.richGridRenderer.contents
-				)
-				.map((item: any) => item.richGridRenderer.contents)
-		}
-		for (const item of _render) {
-			if (item.videoRenderer && item.videoRenderer.lengthText) {
-				const video = item.videoRenderer
-				const title: string = video?.title?.runs[0]?.text || ""
-				const duration: string = video?.lengthText?.simpleText || ""
-				const thumbnail: string =
-					video?.thumbnail?.thumbnails[video?.thumbnail?.thumbnails.length - 1]
-						.url || ""
-				const uploaded: string = video?.publishedTimeText?.simpleText || ""
-				const views: string =
-					video?.viewCountText?.simpleText?.replace(/[^0-9.]/g, "") || ""
-				if (title && thumbnail && duration && uploaded && views) {
-					Results.push({
-						title,
-						thumbnail,
-						duration,
-						uploaded,
-						views,
-						url: "https://www.youtube.com/watch?v=" + video.videoId
-					})
-				}
-			}
-		}
-		return Results
-	} catch (e: any) {
-		return {
-			error: true,
-			message: String(e)
-		}
-	}
+    const form = {
+        k_query: url,
+        k_page: 'home',
+        hl: server || 'id',
+        q_auto: 0
+    }
+    const data = await got.post('https://www.y2mate.com/mates/analyzeV2/ajax', {
+        headers: {
+            ...DEFAULT_HEADERS,
+            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'cookie': '_gid=GA1.2.1661642241.1695862299; _ga=GA1.1.27702254.1695862299; _ga_K8CD7CY0TZ=GS1.1.1695862298.1.1.1695864422.0.0.0; prefetchAd_3381349=true',
+            'origin': 'https://www.y2mate.com'
+        },
+        form
+    }).json()
+    const json = YoutubedlResponseSchema.parse(data)
+    const video: Youtubedl['video'] = {}
+    const audio: Youtubedl['audio'] = {}
+    const other: Youtubedl['other'] = {}
+    for (const key in json.links) {
+        for (const tag in json.links[key as keyof typeof json.links]) {
+            const data: LinkItem = json.links[key as keyof typeof json.links][tag]
+            const quality = data.q
+            const type = data.f
+            const fileSizeH = data.size
+            const fileSize = parseFileSize(fileSizeH);
+            (type === 'mp4' ? video : type === 'mp3' ? audio : other)
+            [quality.toLowerCase()] = {
+                quality,
+                type,
+                fileSizeH,
+                fileSize,
+                download: convert.bind(convert, json.vid, data.k)
+            }
+        }
+    }
+    const result = {
+        id: json.vid,
+        thumbnail: `https://i.ytimg.com/vi/${json.vid}/0.jpg`,
+        title: json.title,
+        duration: json.t,
+        video,
+        audio,
+        other
+    }
+    return YoutubedlSchema.parse(result)
 }
-async function download (
-	url: string
-): Promise<YoutubeDownloadResult | errorHandling> {
-	try {
-		const { data } = await Axios.request({
-			baseURL: YoutubeDownloadBaseUrl,
-			url: "/ytdl/v2/youtube/video_info",
-			method: "POST",
-			data: {
-				url
-			}
-		}).catch((e: any) => e?.response)
-		if (data.cscode !== 200) {
-			throw new Error("API response code " + data.cscode || "unknown")
-		}
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { result } = data.data;
-		const urls: { url: string; quality: string; ext: string }[] = []
-		for (const obj of result.videos) {
-			urls.push({
-				url: obj.url,
-				quality: obj.quality,
-				ext: obj.type
-			});
-		}
-		return {
-			title: result.meta.title,
-			duration: result.meta.length_seconds,
-			thumbnail: result.meta.thumbnail.url,
-			urls,
-			mp3: isNaN(result.convert_to_mp3) ? result.convert_to_mp3 : ""
-		}
-	} catch (e: any) {
-		return {
-			error: true,
-			message: String(e)
-		}
-	}
+
+export async function convert (vid: string, k: string) {
+    const form = {
+        vid,
+        k
+    }
+    const data = await got.post('https://www.y2mate.com/mates/convertV2/index', {
+        headers: {
+            ...DEFAULT_HEADERS,
+            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'cookie': '_gid=GA1.2.1661642241.1695862299; _ga=GA1.1.27702254.1695862299; _ga_K8CD7CY0TZ=GS1.1.1695862298.1.1.1695864422.0.0.0; prefetchAd_3381349=true',
+            'origin': 'https://www.y2mate.com'
+        },
+        form
+    }).json()
+    const json = ConvertResponseSchema.parse(data)
+    return json.dlink
 }
-export { search, download }
