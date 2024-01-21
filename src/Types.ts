@@ -1,5 +1,12 @@
 import { z } from 'zod'
 
+export const AsahOtakSchema = z.object({
+    index: z.number(),
+    soal: z.string(),
+    jawaban: z.string()
+})
+export type AsahOtak = z.infer<typeof AsahOtakSchema>
+
 export const Family100Schema = z.object({
     soal: z.string(),
     jawaban: z.array(z.string())
