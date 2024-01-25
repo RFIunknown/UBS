@@ -1,5 +1,5 @@
 import got from "got"
-import { AsahOtak, AsahOtakSchema } from "../Types"
+import { AsahOtak, AsahOtakSchema } from "../Types/games"
 
 export let asahotakjson: AsahOtak[]
 export default async function asahotak (): Promise<AsahOtak> {
