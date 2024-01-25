@@ -1,7 +1,7 @@
 import { Axios, Cheerio } from "../Utils"
 import { FacebookDownloadBaseUrls } from "../Constant"
 import { errorHandling } from "../Interface"
-import { FacebookDownloadResult } from "../Types"
+import { FacebookDownloadResult } from "../Types/downloader"
 
 async function v1 (
 	url: string
