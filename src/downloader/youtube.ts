@@ -10,7 +10,7 @@ import {
     ConvertResponseSchema,
     LinkItem,
     YoutubedlResponseSchema
-} from "../Types"
+} from "../Types/downloader"
 
 export default async function youtubedl (
     url: string,
