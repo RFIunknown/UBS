@@ -47,6 +47,14 @@ import { instagram } from "@RFIunknown/UBS";
 const Obj = await instagram("https://instagram_URL");
 console.log(Obj);
 ```
+#### Facebook.
+
+```js
+import { facebook } from "@RFIunknown/UBS";
+
+const Obj = await facebook("https://FACEBOOK_URL");
+console.log(Obj);
+```
 
 ### Games
 #### Family00
