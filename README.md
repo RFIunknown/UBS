@@ -63,6 +63,13 @@ import { asahotak } from '@RFIunknown/UBS'
 const data = await asahotak()
 console.log(data) // JSON
 ```
+#### Tebak Kata
+```js
+import { tebakkata } from '@RFIunknown/UBS'
+
+const data = await tebakkata()
+console.log(data) // JSON
+```
 
  [![xct007](https://github.com/xct007.png?size=100)](https://github.com/xct007) | [![BochilTeam](https://github.com/BochilTeam.png?size=150)](https://github.com/BochilTeam) | [![RFIunknown](https://github.com/RFIunknown.png?size=100)](https://github.com/RFIunknown)
 ----|----|----
