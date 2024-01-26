@@ -45,7 +45,7 @@ export interface TiktokScrapeResponse {
   };
 }
 
-export async function tiktokScrape(url: string): Promise<TiktokDownloadResult | errorHandling> {
+export async function tiktokdl(url: string): Promise<TiktokDownloadResult | errorHandling> {
   try {
     const scrapeResult = await axios.post<TiktokScrapeResponse>(
       TikWM,
