@@ -117,4 +117,5 @@ export async function tiktokdl(url: string): Promise<TiktokDownloadResult | erro
     error: true,
     message: String((error as Error).message || 'Unknown error'),
   };
+ }
 }
