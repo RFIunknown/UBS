@@ -52,9 +52,9 @@ export async function tiktokdl(url: string): Promise<TiktokDownloadResult | erro
       { url, count: 12, cursor: 0, web: 1, hd: 1 }
     );
 
-    if (scrapeResult.status === 200) {
-      const data = scrapeResult.data;
+    const data: TiktokScrapeResponse = scrapeResult.data;
 
+    if (scrapeResult.status === 200) {
       if (data && typeof data === 'object') {
         if (data.code === 0 && data.data) {
           const {
@@ -115,7 +115,7 @@ export async function tiktokdl(url: string): Promise<TiktokDownloadResult | erro
     console.error('Error:', error.message);
     return {
       error: true,
-      message: String(error),
+      message: String((error as Error).message || 'Unknown error'),
     };
   }
 }
