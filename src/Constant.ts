@@ -19,3 +19,5 @@ export const InstagramDownloadBaseUrl: {
 export const FacebookDownloadBaseUrls: { v1: string } = {
 	v1: "https://getmyfb.com"
 }
+export const TikWM =
+	"https://www.tikwm.com"
