@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { TikWM } from '../Constant';
-import { TiktokDownloadResult } from '../Types';
+import { TiktokDownloadResult } from '../Types/downloader';
 import { errorHandling } from "../Interface"
 
 export interface TiktokScrapeResponse {
