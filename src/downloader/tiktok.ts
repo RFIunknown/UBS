@@ -111,11 +111,10 @@ export async function tiktokdl(url: string): Promise<TiktokDownloadResult | erro
     } else {
       throw new Error(`Unexpected status code: ${scrapeResult.status}`);
     }
-  } catch (error) {
-    console.error('Error:', error.message);
-    return {
-      error: true,
-      message: String((error as Error).message || 'Unknown error'),
-    };
-  }
+} catch (error: any) {
+  console.error('Error:', (error as Error).message);
+  return {
+    error: true,
+    message: String((error as Error).message || 'Unknown error'),
+  };
 }
