@@ -84,3 +84,15 @@ export type FacebookDownloadResult = {
 	isHdAvailable: boolean;
 	urls: { sd?: string; hd?: string }[];
 };
+
+export type TiktokDownloadResult = {
+	unique_id: string;
+	nickname: string;
+	download_count: number;
+	duration: number;
+	description: string;
+	play: string;
+	wmplay: string;
+	hdplay: string;
+	music: string;
+};
