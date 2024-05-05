@@ -21,3 +21,5 @@ export const FacebookDownloadBaseUrls: { v1: string } = {
 }
 export const TikWM =
 	"https://www.tikwm.com/api"
+export const TiktokDownloadRapidApiServer =
+	"https://tiktok-video-no-watermark2.p.rapidapi.com";
