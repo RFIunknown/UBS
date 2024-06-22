@@ -8,6 +8,7 @@ function CreateInstance (
 ): AxiosInstance {
 	return axios.create({
 		headers: {
+		    "User-Agent":
 			"UBS/Master (https://github.com/RFIunknown/UBS, v1.0.0)",
 			...headers
 		},
