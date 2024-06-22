@@ -8,7 +8,7 @@ function CreateInstance (
 ): AxiosInstance {
 	return axios.create({
 		headers: {
-			"User-Agent": "Frieren-Scraper (0.0.1x)",
+			"UBS/Master (https://github.com/RFIunknown/UBS, v1.0.0)",
 			...headers
 		},
 		...config
